@@ -37,8 +37,8 @@ importers:
         specifier: ^8.0.2
         version: 8.0.2(@babel/core@8.0.1)
       '@salla.sa/twilight':
-        specifier: ^2.14.517
-        version: 2.14.517(@jitsu/protocols@1.11.0)(@types/dlv@1.1.5)(webpack@5.108.4)
+        specifier: ^2.14.518
+        version: 2.14.518(@jitsu/protocols@1.11.0)(@types/dlv@1.1.5)(webpack@5.108.4)
       '@salla.sa/twilight-components':
         specifier: ^2.14.517
         version: 2.14.517(@jitsu/protocols@1.11.0)(@types/dlv@1.1.5)(lit@3.3.3)(webpack@5.108.4)
@@ -1102,6 +1102,9 @@ packages:
   '@salla.sa/base@2.14.517':
     resolution: {integrity: sha512-Fdd1tvUJ/7ApIuC1+90Gyiqr6VX0hYYVQKJgidWINslb/ByqDhYwOcxnZofY58ktl0rfUUI4O3pHlOI9dAUMFg==}
 
+  '@salla.sa/base@2.14.518':
+    resolution: {integrity: sha512-5lVzWHW/8sZC3ZnOk8akEV0IU4pHpKt/BgRWjSX9sVJFea2qe5N/EHJlB9vsgaFc1BDv2CgHIJmuw5CXyTjq+g==}
+
   '@salla.sa/twilight-components@2.14.517':
     resolution: {integrity: sha512-+2RzReEFd1FGpF/48sHzAxup2ducsAW4MRsDW0L7HkleYWuLhsB5NGIdZQo6cSmkC9Bxi1bHADYGhjGlrINFUQ==}
 
@@ -1110,6 +1113,11 @@ packages:
 
   '@salla.sa/twilight@2.14.517':
     resolution: {integrity: sha512-NF4a/EaBgz/fpP4j2JCB/SC1+1F0f6M1xn+M5rzn1+BgKSxDYFqmNdcBnTw/kG1egdEEq3KEOonPlnM2+Foobg==}
+    peerDependencies:
+      webpack: ^4 || ^5
+
+  '@salla.sa/twilight@2.14.518':
+    resolution: {integrity: sha512-o2VxrwtL/vjhgp9NJkAXo2lMLE0TUS0S+5xo5aRF87K/VYEO9y4yezPN9xvjIhbUCzUzvcWmf2//VhCVOR0VDg==}
     peerDependencies:
       webpack: ^4 || ^5
 
@@ -4132,6 +4140,13 @@ snapshots:
       lodash: 4.18.1
       store: 2.0.12
 
+  '@salla.sa/base@2.14.518':
+    dependencies:
+      '@types/applepayjs': 14.0.9
+      eventemitter2: 6.4.9
+      lodash: 4.18.1
+      store: 2.0.12
+
   '@salla.sa/twilight-components@2.14.517(@jitsu/protocols@1.11.0)(@types/dlv@1.1.5)(lit@3.3.3)(webpack@5.108.4)':
     dependencies:
       '@googlemaps/markerclusterer': 2.6.2
@@ -4171,6 +4186,22 @@ snapshots:
     dependencies:
       '@jitsu/js': 1.11.0(@jitsu/protocols@1.11.0)(@types/dlv@1.1.5)
       '@salla.sa/base': 2.14.517
+      axios: 1.18.1
+      infinite-scroll: 4.0.1
+      jwt-decode: 4.0.0
+      lang.js: 1.1.14
+      webpack: 5.108.4(postcss@8.5.16)(webpack-cli@7.2.1)
+      websocket: 1.0.35
+    transitivePeerDependencies:
+      - '@jitsu/protocols'
+      - '@types/dlv'
+      - debug
+      - supports-color
+
+  '@salla.sa/twilight@2.14.518(@jitsu/protocols@1.11.0)(@types/dlv@1.1.5)(webpack@5.108.4)':
+    dependencies:
+      '@jitsu/js': 1.11.0(@jitsu/protocols@1.11.0)(@types/dlv@1.1.5)
+      '@salla.sa/base': 2.14.518
       axios: 1.18.1
       infinite-scroll: 4.0.1
       jwt-decode: 4.0.0

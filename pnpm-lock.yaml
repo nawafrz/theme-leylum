@@ -42,9 +42,6 @@ importers:
       '@salla.sa/twilight-components':
         specifier: ^2.14.517
         version: 2.14.517(@jitsu/protocols@1.11.0)(@types/dlv@1.1.5)(lit@3.3.3)(webpack@5.108.4)
-      '@salla.sa/twilight-tailwind-theme':
-        specifier: ^2.14.517
-        version: 2.14.517
       '@tailwindcss/forms':
         specifier: ^0.5.11
         version: 0.5.11(tailwindcss@3.4.19)

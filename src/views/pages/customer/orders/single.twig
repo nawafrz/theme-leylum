@@ -64,8 +64,6 @@
 | order.rating.store               | ?Rating                           |                                                                                          |
 | order.rating.shipping            | ?Rating                           |                                                                                          |
 | order.rating.product             | Rating[]                          | Product ratings matched by `rating.product.id`; includes factor_reviews                  |
-| order.rating.product[].images    | array                             |                                                                                          |
-| order.rating.product[].videos    | array                             |                                                                                          |
 | order.links                      | array                             |                                                                                          |
 | order.links[].url                | string                            |                                                                                          |
 | order.links[].label              | string                            |                                                                                          |
@@ -313,6 +311,7 @@
                             {% endif %}
 
                             {% if item.attachments %}
+                                <script>console.log('item', {{ item|json_encode|raw }}); console.log('item.attachments', {{ item.attachments|json_encode|raw }});</script>
                                 <div class="flow-root rounded-md px-4 border border-gray-200">
                                     <dl class="text-sm text-dark divide-y divide-border-color">
                                         <div class="py-3.5 md:flex items-center justify-between">
@@ -326,7 +325,7 @@
                                     </dl>
                                 </div>
                             {% endif %}
-                            
+
                             <salla-review-order-item product-id="{{ item.product.id }}"></salla-review-order-item>
                         </div>
                     {% endfor %}

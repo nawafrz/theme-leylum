@@ -63,7 +63,7 @@
 | order.rating                     | ?OrderRatings                     |                                                                                          |
 | order.rating.store               | ?Rating                           |                                                                                          |
 | order.rating.shipping            | ?Rating                           |                                                                                          |
-| order.rating.product             | Rating[]                          | Product ratings matched by `rating.product.id`; includes factor_reviews                  |
+| order.rating.product             | ?array                            | Product ratings array with factor_reviews                                                |
 | order.links                      | array                             |                                                                                          |
 | order.links[].url                | string                            |                                                                                          |
 | order.links[].label              | string                            |                                                                                          |
@@ -182,6 +182,7 @@
                 <salla-button data-testid="store-order-rate-btn" color="light" class="btn--rounded-full !text-primary" onclick="salla.event.dispatch('rating::open')">{{ trans('pages.rating.rate') }}</salla-button>
             </div>
         {% endif %}
+
 
         {# Order Summary #}
         <div class="overflow-hidden space-y-5">
@@ -311,17 +312,30 @@
                             {% endif %}
 
                             {% if item.attachments %}
-                                <script>console.log('item', {{ item|json_encode|raw }}); console.log('item.attachments', {{ item.attachments|json_encode|raw }});</script>
                                 <div class="flow-root rounded-md px-4 border border-gray-200">
                                     <dl class="text-sm text-dark divide-y divide-border-color">
-                                        <div class="py-3.5 md:flex items-center justify-between">
-                                            <dt class="mb-2 md:mb-0">
-                                                {{ trans('pages.products.attachments') }}
-                                            </dt>
-                                            <dd class="font-medium text-gray-900">
-                                                <salla-attachments attachments="{{ item.attachments|json_encode }}"></salla-attachments>
-                                            </dd>
-                                        </div>
+                                        {% for attachment in item.attachments %}
+                                            <div class="py-3.5 md:flex items-center justify-between">
+                                                <dt class="mb-2 md:mb-0">
+                                                    {{ trans('pages.products.attachments') }}
+                                                </dt>
+                                                <dd class="font-medium {{ attachment.type == 'image' ? 'text-gray-900' : 'text-xs' }}">
+                                                    <a href="{{ attachment.url }}">
+                                                        {% if attachment.type == 'image' %}
+                                                            <div class="flex rtl:space-x-reverse space-x-2.5">
+                                                                <a href="{{ attachment.url }}" target="_blank">
+                                                                    <img class="h-7 w-7 object-cover rounded-md"
+                                                                         src="{{ attachment.url }}"
+                                                                         alt="{{ item.name }}"/>
+                                                                </a>
+                                                            </div>
+                                                        {% else %}
+                                                            {{ trans('pages.orders.file_url') }}
+                                                        {% endif %}
+                                                    </a>
+                                                </dd>
+                                            </div>
+                                        {% endfor %}
                                     </dl>
                                 </div>
                             {% endif %}

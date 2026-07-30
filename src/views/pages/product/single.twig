@@ -432,6 +432,14 @@
 
                 {% hook 'product:single.description.end' %}
                 <salla-quick-order data-testid="store-product-quick-order" class="mt-5 md:-mb-2 block"></salla-quick-order>
+                {#
+                    Hook: product.single.ai_sections
+                    Fires after the product form and quick-order block.
+                    Hosts the AI-driven (Moshamer) recommendation components,
+                    which are injected for stores on the
+                    ai-driven-personalized-product feature.
+                #}
+                <div class="s-blocks-wrapper s-ai-sections">{% hook 'product.single.ai_sections' %}</div>
             </div>
         </div>
         <salla-offer data-testid="store-product-offer"></salla-offer>

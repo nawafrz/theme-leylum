@@ -70,6 +70,14 @@
 			</div>
 
 			{% hook 'product:index.items.end' %}
+			{#
+			    Hook: product.index.ai_sections
+			    Fires after the products grid.
+			    Hosts the AI-driven (Moshamer) recommendation components,
+			    which are injected for stores on the
+			    ai-driven-personalized-product feature.
+			#}
+			<div class="s-blocks-wrapper s-ai-sections">{% hook 'product.index.ai_sections' %}</div>
 		</div>
 	</div>
 

@@ -8,7 +8,7 @@
 | position        | Int     | Sorting number start from zero                                   |
 
 #}
-<section data-testid="store-home-fixed-banner" class="s-block s-block--fixed-banner wide-placeholder">
+<section data-testid="store-home-fixed-banner" class="s-block s-block--fixed-banner wide-placeholder {{ component.advanced_visibility and not component.advanced_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.advanced_visibility and not component.advanced_visibility.desktop ? 's-hide-on-desktop' : '' }}">
     <div class="container">
         {% set alt_text = image.alt|trim ? image.alt : 'fixed banner' %}
         <a href="{{ url }}" class="banner banner--fixed overflow-hidden" aria-label="Banner {{ alt_text }}">

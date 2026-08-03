@@ -6,6 +6,6 @@
 | sort               | string                    |                                     |
 | hide_customer_info | bool                      | show/hide info customers            |
 #}
-<section data-testid="store-home-testimonials" class="s-block s-block--testimonials container overflow-hidden">
+<section data-testid="store-home-testimonials" class="s-block s-block--testimonials container overflow-hidden {{ component.advanced_visibility and not component.advanced_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.advanced_visibility and not component.advanced_visibility.desktop ? 's-hide-on-desktop' : '' }}">
     <salla-reviews {{ display_all_url ? "display-all-link" : "" }} limit="{{ limit }}" sort="{{ sort }}" {{ hide_customer_info ? 'hide-customer-info' : '' }} type="{{type}}"></salla-reviews>
 </section> 

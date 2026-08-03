@@ -7,7 +7,7 @@
 | items[].text  | string | Subtitle for the feature                                         |
 | position      | Int    | Sorting number start from zero                                   |
 #}
-<section data-testid="store-home-features" class="s-block s-block--features container">
+<section data-testid="store-home-features" class="s-block s-block--features container {{ component.advanced_visibility and not component.advanced_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.advanced_visibility and not component.advanced_visibility.desktop ? 's-hide-on-desktop' : '' }}">
     <div class="grid grid-cols-[repeat(2,minmax(0,1fr))] md:grid-cols-[repeat(3,minmax(0,1fr))] gap-4 sm:gap-6 xl:gap-8">
       {% for item in items %}
           <div class="s-block--features__item">

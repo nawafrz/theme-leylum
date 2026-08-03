@@ -9,7 +9,7 @@
 | limit                 | int       | Number of products to be shown                                   |
 #}
 {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
-<section data-testid="store-home-fixed-products" class="s-block container">
+<section data-testid="store-home-fixed-products" class="s-block container {{ component.advanced_visibility and not component.advanced_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.advanced_visibility and not component.advanced_visibility.desktop ? 's-hide-on-desktop' : '' }}">
     {% if title %}
       <div class="s-block__title">
         <div class="right-side">

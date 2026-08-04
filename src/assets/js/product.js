@@ -26,9 +26,10 @@ class Product extends BasePage {
 
     initProductOptionValidations() {
       document.querySelector('.product-form')?.addEventListener('change', function(){
-        // reportValidity() natively focuses/scrolls to the first empty required option mid-edit; read validity instead
-        const isComplete = Array.from(this.elements).every(el => el.validity.valid);
-        isComplete && salla.product.getPrice(new FormData(this));
+        // Prefer checkValidity() over iterating form.elements: some controls (e.g. fieldset)
+        // can make `el.validity.valid` throw/fail and block the live price request entirely.
+        // checkValidity() keeps the same gate without focus/scroll (unlike reportValidity).
+        this.checkValidity() && salla.product.getPrice(new FormData(this));
       });
     }
 

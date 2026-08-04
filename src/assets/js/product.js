@@ -30,6 +30,25 @@ class Product extends BasePage {
         const isComplete = Array.from(this.elements).every(el => el.validity.valid);
         isComplete && salla.product.getPrice(new FormData(this));
       });
+
+      // For optional free options without a default: scroll to the options section
+      // and show a soft prompt before quick buy / Apple Pay proceeds.
+      // This does NOT block — it just ensures the customer notices them.
+      salla.hooks.on('salla-add-product-button', 'validate', async (ctx) => {
+        const optionsEl = document.querySelector(`salla-product-options[product-id="${ctx.productId}"]`);
+        if (!optionsEl) return ctx;
+
+        const selected = await optionsEl.getSelectedOptions?.() ?? {};
+        const options  = optionsEl.optionsData ?? [];
+
+        const hasUnfilledOptional = options.some(o => !o.required && !selected[o.id]);
+        if (hasUnfilledOptional) {
+          optionsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          salla.notify.info(salla.lang.get('pages.products.optional_options_hint') ?? salla.lang.get('common.messages.optional'));
+        }
+
+        return ctx; // non-blocking — quick buy continues
+      });
     }
 
     initImagesZooming() {

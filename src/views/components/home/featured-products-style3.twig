@@ -13,7 +13,7 @@
 | items[].id                    | string    | Section id                                                          |
 | position                      | int       | Sorting number starts from zero                                     |
 #}
-<section data-testid="store-home-featured-products-grid" class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container {{ component.advanced_visibility and not component.advanced_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.advanced_visibility and not component.advanced_visibility.desktop ? 's-hide-on-desktop' : '' }}">
+<section data-testid="store-home-featured-products-grid" class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container {{ component.channel_visibility and not component.channel_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.channel_visibility and not component.channel_visibility.desktop ? 's-hide-on-desktop' : '' }}">
     <div class="inner">
         {% for section in items %}
             <div>

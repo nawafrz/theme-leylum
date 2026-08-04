@@ -10,7 +10,7 @@
 | position                        | int      | Sorting number start from zero                                               |
 #}
 
-<section data-testid="store-home-square-banners" class="s-block s-block--banners container {{ component.advanced_visibility and not component.advanced_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.advanced_visibility and not component.advanced_visibility.desktop ? 's-hide-on-desktop' : '' }}">
+<section data-testid="store-home-square-banners" class="s-block s-block--banners container {{ component.channel_visibility and not component.channel_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.channel_visibility and not component.channel_visibility.desktop ? 's-hide-on-desktop' : '' }}">
     <div class="grid {{ component.banners|length <= 3 ? 'md:grid-cols-' ~ component.banners|length : 'md:grid-cols-3 two-row' }} grid-flow-row gap-3 sm:gap-8">
         {% for index, banner in component.banners %}
             <a  href="{{banner.url}}" aria-label="{{ (banner.title ? banner.title : 'square-banner-' ~ index) | e('html_attr') }}" class="banner-entry lazy {{banner.title ? 'has-overlay' : ''}} {{ component.banners|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-bg="{{ banner.image }}">

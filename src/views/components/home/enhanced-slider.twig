@@ -8,7 +8,7 @@
 | component.slides               | object[] | list of slides                                                               |
 | position                       | int      | Sorting number start from zero                                               |
 #}
-<section data-testid="store-home-slider" class="s-block s-block--hero-slider s-block--full-bg wide-placeholder {{ component.advanced_visibility and not component.advanced_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.advanced_visibility and not component.advanced_visibility.desktop ? 's-hide-on-desktop' : '' }}"> 
+<section data-testid="store-home-slider" class="s-block s-block--hero-slider s-block--full-bg wide-placeholder {{ component.channel_visibility and not component.channel_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.channel_visibility and not component.channel_visibility.desktop ? 's-hide-on-desktop' : '' }}"> 
     <salla-slider 
       id="main-slider-{{ position }}"
       auto-play

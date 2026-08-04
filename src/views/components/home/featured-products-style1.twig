@@ -17,7 +17,7 @@
 | position                 | int       | sorting block                                                       |
 #}
 {% set component_id='featured-products-style1-' ~ position %}
-<section data-testid="store-home-featured-products" class="s-block s-block-tabs s-block--special-products container {{ component.advanced_visibility and not component.advanced_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.advanced_visibility and not component.advanced_visibility.desktop ? 's-hide-on-desktop' : '' }}" id="{{ component_id }}">
+<section data-testid="store-home-featured-products" class="s-block s-block-tabs s-block--special-products container {{ component.channel_visibility and not component.channel_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.channel_visibility and not component.channel_visibility.desktop ? 's-hide-on-desktop' : '' }}" id="{{ component_id }}">
     <div class="s-block__title"> 
       <div class="right-side">
         <h2>{{ main_product.title }}</h2>

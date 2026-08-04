@@ -4,7 +4,8 @@
 | products        | Products[] |                                |
 | position        | Int        | Sorting number start from zero |
 #}
-<section data-testid="store-home-products-section" class="s-block s-block--latest-products container mt-6 sm:mt-8 {{ component.channel_visibility and not component.channel_visibility.mobile ? 's-hide-on-mobile' : '' }} {{ component.channel_visibility and not component.channel_visibility.desktop ? 's-hide-on-desktop' : '' }}">
+{% set channel_vis = channel_visibility|default(component.channel_visibility|default(null)) %}
+<section data-testid="store-home-products-section" class="s-block s-block--latest-products container mt-6 sm:mt-8 {{ channel_vis and not channel_vis.mobile ? 's-hide-on-mobile' : '' }} {{ channel_vis and not channel_vis.desktop ? 's-hide-on-desktop' : '' }}">
     <div class="s-block__title">
       <h2>{{ trans('blocks.home.latest_products') }}</h2>
     </div>

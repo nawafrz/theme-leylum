@@ -14,43 +14,94 @@ class Product extends BasePage {
             productSku: '.product-sku',
         });
 
-        this._pendingFreeOptions = null;
+        this._pendingFreeOptions      = null;
+        this._pendingOfferFreeOptions = null;
 
         this.initProductOptionValidations();
 
         if(imageZoom){
-            // call the function when the page is ready
             this.initImagesZooming();
-            // listen to screen resizing
             window.addEventListener('resize', () => this.initImagesZooming());
         }
     }
 
     initProductOptionValidations() {
       document.querySelector('.product-form')?.addEventListener('change', function(){
-        // reportValidity() natively focuses/scrolls to the first empty required option mid-edit; read validity instead
         const isComplete = Array.from(this.elements).every(el => el.validity.valid);
         isComplete && salla.product.getPrice(new FormData(this));
       });
 
-      // Gate: intercept Quick Buy / Apple Pay before cart creation to enforce free
-      // (advance=0) product options. Two paths:
-      //  1. PDP — salla-product-options is on the page: validate in-place, block + scroll
-      //     when required options are missing, inject selections via cart::before.add.item.
-      //  2. Non-PDP (product card / mini-cart) — call product/options API; if the product
-      //     has free options, open salla-order-options-modal (same as CHOD-11650) with the
-      //     free options as steps, then inject selections the same way.
+      // Gate: intercept Quick Buy / Apple Pay before cart creation.
+      //
+      // Priority order:
+      //  1. If the product (X) triggers a Buy X Get Y offer where the free
+      //     product (Y) has required advance=0 options → show Y's options in the
+      //     modal (offer_options from the API).
+      //  2. If X itself has required advance=0 options:
+      //     PDP page   → validate in-place via salla-product-options on page.
+      //     Non-PDP    → show X's options in the modal (options from the API).
       salla.hooks.on('salla-add-product-button', 'validate', async (ctx) => {
+        let resp;
+        try {
+          resp = await salla.product.api.getOptions([{ id: ctx.productId, quantity: ctx.quantity ?? 1 }]);
+        } catch {
+          return ctx;
+        }
+
+        const offerOptions  = resp?.data?.offer_options  ?? null;
+        const freeOptions   = resp?.data?.options        ?? [];
+        const product       = resp?.data?.products?.[0];
+
+        // Priority 1: free offer product (Y) has required options → show modal for Y.
+        if (offerOptions?.options?.length) {
+          return this._handleOfferFreeOptionsModal(ctx, offerOptions);
+        }
+
+        // Priority 2: product X has its own free options.
         const pdpOptionsEl = document.querySelector(`salla-product-options[product-id="${ctx.productId}"]`);
 
-        if (pdpOptionsEl) {
+        if (pdpOptionsEl && freeOptions.length) {
           return this._handlePdpFreeOptions(ctx, pdpOptionsEl);
         }
 
-        return this._handleModalFreeOptions(ctx);
+        if (!pdpOptionsEl && freeOptions.length) {
+          return this._openOptionsModal(ctx, freeOptions, product);
+        }
+
+        return ctx;
       });
     }
 
+    // Show the modal for Y (free offer product) options.
+    async _handleOfferFreeOptionsModal(ctx, offerOptions) {
+      const modal = document.querySelector('salla-order-options-modal');
+      if (!modal) return ctx;
+
+      let result;
+      try {
+        result = await modal.open({
+          orderOptions : offerOptions.options,
+          basePrice    : offerOptions.product?.price?.amount ?? 0,
+          paymentMode  : ctx.paymentMode ?? 'default',
+          product      : offerOptions.product,
+        });
+      } catch {
+        throw new Error('offer_free_options_modal_dismissed');
+      }
+
+      const selected = {};
+      (result?.orderOptions ?? []).forEach(({ id, value }) => { selected[id] = value; });
+      if (Object.keys(selected).length) {
+        this._pendingOfferFreeOptions = {
+          productId : offerOptions.product?.id,
+          options   : selected,
+        };
+      }
+
+      return ctx;
+    }
+
+    // PDP page: salla-product-options element is on the page — validate in-place.
     async _handlePdpFreeOptions(ctx, optionsEl) {
       const selected    = await optionsEl.getSelectedOptions?.() ?? {};
       const allOptions  = optionsEl.optionsData ?? [];
@@ -71,7 +122,6 @@ class Product extends BasePage {
         this._pendingFreeOptions = selectedFree;
       }
 
-      // Soft hint for optional unfilled free options (non-blocking).
       const hasUnfilledOptional = freeOptions.some(o => !o.required && !selected[o.id]);
       if (hasUnfilledOptional) {
         optionsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -81,19 +131,8 @@ class Product extends BasePage {
       return ctx;
     }
 
-    async _handleModalFreeOptions(ctx) {
-      let resp;
-      try {
-        resp = await salla.product.api.getOptions([{ id: ctx.productId, quantity: ctx.quantity ?? 1 }]);
-      } catch {
-        return ctx;
-      }
-
-      const freeOptions = resp?.data?.options ?? [];
-      const product     = resp?.data?.products?.[0];
-
-      if (!freeOptions.length) return ctx;
-
+    // Non-PDP: open the modal for X's own free options.
+    async _openOptionsModal(ctx, freeOptions, product) {
       const modal = document.querySelector('salla-order-options-modal');
       if (!modal) return ctx;
 
@@ -119,24 +158,16 @@ class Product extends BasePage {
     }
 
     initImagesZooming() {
-      // skip if the screen is not desktop or if glass magnifier
-      // is already crated for the image before
       const imageZoom = document.querySelector('.image-slider .magnify-wrapper.swiper-slide-active .img-magnifier-glass');
       if (window.innerWidth  < 1024 || imageZoom) return;
       setTimeout(() => {
-          // set delay after the resizing is done, start creating the glass
-          // to create the glass in the proper position
           const image = document.querySelector('.image-slider .swiper-slide-active img');
           zoom(image?.id, 2);
       }, 250);
 
-
       document.querySelector('salla-slider.details-slider').addEventListener('slideChange', (e) => {
-          // set delay till the active class is ready
           setTimeout(() => {
               const imageZoom = document.querySelector('.image-slider .swiper-slide-active .img-magnifier-glass');
-
-              // if the zoom glass is already created skip
               if (window.innerWidth  < 1024 || imageZoom) return;
               const image = document.querySelector('.image-slider .magnify-wrapper.swiper-slide-active img');
               zoom(image?.id, 2);
@@ -145,8 +176,7 @@ class Product extends BasePage {
     }
 
     registerEvents() {
-      // Inject free product options collected by the gate into the cart request.
-      // Mirrors how CHOD-11650 injects order_options via cart::before.add.item.
+      // Inject X's own free options into the cart request.
       salla.event.on('cart::before.add.item', (eventData) => {
         if (!this._pendingFreeOptions) return;
         const options = this._pendingFreeOptions;
@@ -154,12 +184,21 @@ class Product extends BasePage {
         eventData.payload?.set?.('options', options);
       });
 
+      // Inject Y's (free offer product) options into the cart request.
+      // The backend will use these when auto-adding Y after X is added.
+      salla.event.on('cart::before.add.item', (eventData) => {
+        if (!this._pendingOfferFreeOptions) return;
+        const { productId, options } = this._pendingOfferFreeOptions;
+        this._pendingOfferFreeOptions = null;
+        eventData.payload?.set?.('free_product_options', { [productId]: options });
+      });
+
       salla.event.on('product::price.updated.failed',()=>{
         app.element('.price-wrapper').classList.add('hidden');
         const outOfStock = app.element('.out-of-stock');
         outOfStock.classList.remove('hidden');
         outOfStock.classList.remove('scale-pulse');
-        void outOfStock.offsetWidth; // trigger reflow
+        void outOfStock.offsetWidth;
         outOfStock.classList.add('scale-pulse');
       })
       salla.product.event.onPriceUpdated((res) => {
@@ -182,7 +221,7 @@ class Product extends BasePage {
 
         document.querySelectorAll('.total-price, .product-weight').forEach(el => {
           el.classList.remove('scale-pulse');
-          void el.offsetWidth; // trigger reflow
+          void el.offsetWidth;
           el.classList.add('scale-pulse');
         });
       });

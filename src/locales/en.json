@@ -12,7 +12,8 @@
       "cart_options": "Cart Options"
     },
     "products": {
-      "optional_options_hint": "You can customize your order by selecting the available options below."
+      "optional_options_hint": "You can customize your order by selecting the available options below.",
+      "required_free_options_message": "Please select all required options before completing your order."
     },
     "order": {
       "can_edit_or_delete_your_review_within": "You can edit or delete your review within",

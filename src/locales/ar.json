@@ -12,7 +12,8 @@
       "cart_options": "خيارات السلة"
     },
     "products": {
-      "optional_options_hint": "يمكنك تخصيص طلبك باختيار الخيارات المتاحة أدناه."
+      "optional_options_hint": "يمكنك تخصيص طلبك باختيار الخيارات المتاحة أدناه.",
+      "required_free_options_message": "يرجى اختيار الخيارات المطلوبة قبل إتمام الطلب"
     },
     "order": {
       "can_edit_or_delete_your_review_within": "يمكنك تعديل أو حذف تقييمك خلال",

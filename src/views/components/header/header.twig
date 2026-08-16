@@ -31,10 +31,8 @@
               </button>
           {% endif %}
 
-          {# Quick Delivery tag (homepage only) — self-gates on store.settings.quick_delivery_eligible #}
-          {% if is_page('index') %}
-              <salla-quick-delivery-tag></salla-quick-delivery-tag>
-          {% endif %}
+          {# Quick Delivery tag — self-gates on store.settings.quick_delivery_eligible #}
+          <salla-quick-delivery-tag></salla-quick-delivery-tag>
 
           {# Search bar #}
           <div class="header-search flex-1">

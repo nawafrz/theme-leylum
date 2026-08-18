@@ -13,7 +13,7 @@
           <div class="s-block__title">
             {% if component.title %}
               <div class="right-side">
-                <h2>{{ component.title }}</h2>
+                <h2>{{ (component.title is iterable ? component.title[language.code]|default(component.title|first) : component.title) }}</h2>
                 {# <p>عنوان فرعي توصيفي صغير</p> #}
               </div>
             {% endif %}

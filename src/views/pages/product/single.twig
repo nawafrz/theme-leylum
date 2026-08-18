@@ -224,17 +224,20 @@
                 {% if product.is_taxable %}
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
+                {% set empty_price = store.settings.product.show_price_as_dash ? '-' : '' %}
+                {% set sar_icon = '<i class="sicon-sar"></i>' %}
                 {# Price #}
                 <div data-testid="store-product-price" class="flex whitespace-nowrap gap-4 items-center">
                   <div class="{{ product.is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                      <p class="text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</p>
-                      <span class="text-gray-500 line-through">{{product.regular_price|money}}</span>
+                      <p class="text-red-800 font-bold text-xl inline-block">{{ product.sale_price ? product.sale_price|money|replace({'SAR': sar_icon, 'ر.س': sar_icon})|raw : empty_price }}</p>
+                      <span class="text-gray-500 line-through">{{ product.regular_price ? product.regular_price|money|replace({'SAR': sar_icon, 'ر.س': sar_icon})|raw : empty_price }}</span>
                   </div>
                   <div class="gap-4 {{ product.is_on_sale ? 'hidden' : 'flex' }}">
                       {% if product.starting_price %} 
                           <span class="">{{ trans('pages.products.starting_price') }}</span>
-                      {% endif %} 
-                          <p class=" font-bold text-xl inline-block"> {{product.starting_price ? product.starting_price|money : product.price|money }}</p>
+                      {% endif %}
+                      {% set current_price = product.starting_price ? product.starting_price : product.price %}
+                          <p class=" font-bold text-xl inline-block">{{ current_price ? current_price|money|replace({'SAR': sar_icon, 'ر.س': sar_icon})|raw : empty_price }}</p>
                   </div>
                 </div>
 
@@ -366,14 +369,15 @@
 
                             <div class="flex whitespace-nowrap price-wrapper gap-4 items-center">
                               <div class="{{ product.is_on_sale ? '' : 'hidden' }} price_is_on_sale space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                                <h2 class="total-price text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h2>
-                                <span class="before-price text-gray-500 line-through">{{product.regular_price|money}}</span>
+                                <h2 class="total-price text-red-800 font-bold text-xl inline-block">{{ product.sale_price ? product.sale_price|money|replace({'SAR': sar_icon, 'ر.س': sar_icon})|raw : empty_price }}</h2>
+                                <span class="before-price text-gray-500 line-through">{{ product.regular_price ? product.regular_price|money|replace({'SAR': sar_icon, 'ر.س': sar_icon})|raw : empty_price }}</span>
                               </div>
                               <div class="starting-or-normal-price gap-4 {{ product.is_on_sale ? 'hidden' : 'flex' }}">
                                 {% if product.starting_price %} 
                                   <span class="starting-price-title">{{ trans('pages.products.starting_price') }}</span>
                                 {% endif %} 
-                                <h2 class="total-price font-bold text-xl inline-block"> {{product.starting_price ? product.starting_price|money : product.price|money }}</h2>
+                                {% set current_price = product.starting_price ? product.starting_price : product.price %}
+                                <h2 class="total-price font-bold text-xl inline-block">{{ current_price ? current_price|money|replace({'SAR': sar_icon, 'ر.س': sar_icon})|raw : empty_price }}</h2>
                               </div>
                             </div>
 

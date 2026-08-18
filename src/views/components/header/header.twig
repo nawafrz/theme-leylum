@@ -31,6 +31,11 @@
               {% endif %}
           </div>
 
+          {# Bullet Delivery tag — desktop only; mobile instance is above the top nav #}
+          <div class="hidden lg:block">
+            <salla-bullet-delivery-tag></salla-bullet-delivery-tag>
+          </div>
+
           {# Scopes | Branches #}
           {% if store.scope %}
               <button class="btn--rounded-gray"
@@ -38,11 +43,6 @@
                   <i class="sicon-location rtl:ml-1 ltr:mr-1"></i> {{ store.scope.name }}
               </button>
           {% endif %}
-
-          {# Bullet Delivery tag — desktop only; mobile instance is above the top nav #}
-          <div class="hidden lg:block">
-            <salla-bullet-delivery-tag></salla-bullet-delivery-tag>
-          </div>
 
           {# Search bar #}
           <div class="header-search flex-1">

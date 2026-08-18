@@ -15,7 +15,7 @@ class Product extends BasePage {
         });
 
         this._pendingFreeOptions      = null;
-        this._pendingOfferFreeOptions = null;
+        this._pendingOfferFreeOptions = null; // [{ productId, options: {id:val} }, ...]
 
         this.initProductOptionValidations();
 
@@ -23,80 +23,79 @@ class Product extends BasePage {
             this.initImagesZooming();
             window.addEventListener('resize', () => this.initImagesZooming());
         }
-    }
 
-    initProductOptionValidations() {
-      document.querySelector('.product-form')?.addEventListener('change', function(){
-        // reportValidity() natively focuses/scrolls to the first empty required option mid-edit; read validity instead
-        const isComplete = Array.from(this.elements).every(el => !el.willValidate || el.validity.valid);
-        isComplete && salla.product.getPrice(new FormData(this));
-      });
+        // Gate: intercept Quick Buy / Apple Pay before cart creation.
+        //
+        // Priority order:
+        //  1. If the product (X) triggers one or more Buy X Get Y offers where each
+        //     free product (Y) has required advance=0 options → show one modal step
+        //     per Y (sequential), collecting options before the cart request fires.
+        //  2. If X itself has required advance=0 options:
+        //     PDP page   → validate in-place via salla-product-options on page.
+        //     Non-PDP    → show X's options in the modal (options from the API).
+        salla.hooks.on('salla-add-product-button', 'validate', async (ctx) => {
+          let resp;
+          try {
+            resp = await salla.product.api.getOptions([{ id: ctx.productId, quantity: ctx.quantity ?? 1 }]);
+          } catch {
+            return ctx;
+          }
 
-      // Gate: intercept Quick Buy / Apple Pay before cart creation.
-      //
-      // Priority order:
-      //  1. If the product (X) triggers a Buy X Get Y offer where the free
-      //     product (Y) has required advance=0 options → show Y's options in the
-      //     modal (offer_options from the API).
-      //  2. If X itself has required advance=0 options:
-      //     PDP page   → validate in-place via salla-product-options on page.
-      //     Non-PDP    → show X's options in the modal (options from the API).
-      salla.hooks.on('salla-add-product-button', 'validate', async (ctx) => {
-        let resp;
-        try {
-          resp = await salla.product.api.getOptions([{ id: ctx.productId, quantity: ctx.quantity ?? 1 }]);
-        } catch {
+          const offerOptionsList = resp?.data?.advance_free_product ?? [];
+          const freeOptions      = resp?.data?.options ?? [];
+          const product          = resp?.data?.products?.[0];
+
+          // Priority 1: one or more free offer products have required options.
+          if (offerOptionsList.length) {
+            return this._handleOfferFreeOptionsSteps(ctx, offerOptionsList);
+          }
+
+          // Priority 2: product X has its own free options.
+          const pdpOptionsEl = document.querySelector(`salla-product-options[product-id="${ctx.productId}"]`);
+
+          if (pdpOptionsEl && freeOptions.length) {
+            return this._handlePdpFreeOptions(ctx, pdpOptionsEl);
+          }
+
+          if (!pdpOptionsEl && freeOptions.length) {
+            return this._openOptionsModal(ctx, freeOptions, product);
+          }
+
           return ctx;
-        }
-
-        const offerOptions  = resp?.data?.offer_options  ?? null;
-        const freeOptions   = resp?.data?.options        ?? [];
-        const product       = resp?.data?.products?.[0];
-
-        // Priority 1: free offer product (Y) has required options → show modal for Y.
-        if (offerOptions?.options?.length) {
-          return this._handleOfferFreeOptionsModal(ctx, offerOptions);
-        }
-
-        // Priority 2: product X has its own free options.
-        const pdpOptionsEl = document.querySelector(`salla-product-options[product-id="${ctx.productId}"]`);
-
-        if (pdpOptionsEl && freeOptions.length) {
-          return this._handlePdpFreeOptions(ctx, pdpOptionsEl);
-        }
-
-        if (!pdpOptionsEl && freeOptions.length) {
-          return this._openOptionsModal(ctx, freeOptions, product);
-        }
-
-        return ctx;
-      });
+        });
     }
 
-    // Show the modal for Y (free offer product) options.
-    async _handleOfferFreeOptionsModal(ctx, offerOptions) {
+    // Show one modal step per offer product (Y), in sequence.
+    // Collects { productId, options } for each Y that has selections.
+    async _handleOfferFreeOptionsSteps(ctx, offerOptionsList) {
       const modal = document.querySelector('salla-order-options-modal');
       if (!modal) return ctx;
 
-      let result;
-      try {
-        result = await modal.open({
-          orderOptions : offerOptions.options,
-          basePrice    : offerOptions.product?.price?.amount ?? 0,
-          paymentMode  : ctx.paymentMode ?? 'default',
-          product      : offerOptions.product,
-        });
-      } catch {
-        throw new Error('offer_free_options_modal_dismissed');
+      const pending = [];
+
+      for (const offerOptions of offerOptionsList) {
+        let result;
+        try {
+          result = await modal.open({
+            orderOptions : offerOptions.options,
+            basePrice    : offerOptions.product?.price?.amount ?? 0,
+            paymentMode  : ctx.paymentMode ?? 'default',
+            product      : offerOptions.product,
+          });
+        } catch {
+          throw new Error('offer_free_options_modal_dismissed');
+        }
+
+        const selected = {};
+        (result?.orderOptions ?? []).forEach(({ id, value }) => { selected[id] = value; });
+
+        if (Object.keys(selected).length) {
+          pending.push({ productId: offerOptions.product?.id, options: selected });
+        }
       }
 
-      const selected = {};
-      (result?.orderOptions ?? []).forEach(({ id, value }) => { selected[id] = value; });
-      if (Object.keys(selected).length) {
-        this._pendingOfferFreeOptions = {
-          productId : offerOptions.product?.id,
-          options   : selected,
-        };
+      if (pending.length) {
+        this._pendingOfferFreeOptions = pending;
       }
 
       return ctx;
@@ -185,13 +184,41 @@ class Product extends BasePage {
         eventData.payload?.set?.('options', options);
       });
 
-      // Inject Y's (free offer product) options into the cart request.
-      // The backend will use these when auto-adding Y after X is added.
+      // Inject all free offer products (Y₁, Y₂, …) as explicit products in the
+      // cart request so the backend adds each with the shopper-selected options.
+      //
+      // Converts: id=X&quantity=N
+      // Into:     products[0][id]=X&products[0][quantity]=N
+      //           products[1][id]=Y1&products[1][options][o1]=v1
+      //           products[2][id]=Y2&products[2][options][o2]=v2  …
+      //
+      // MiniCheckoutRequest::prepareForValidation() expands bracket-notation keys
+      // into nested arrays before validation, so the backend receives a clean
+      // products[] structure it can iterate with addListOfProductsWithOptions().
       salla.event.on('cart::before.add.item', (eventData) => {
         if (!this._pendingOfferFreeOptions) return;
-        const { productId, options } = this._pendingOfferFreeOptions;
+        const pending = this._pendingOfferFreeOptions;
         this._pendingOfferFreeOptions = null;
-        eventData.payload?.set?.('free_product_options', { [productId]: options });
+
+        // Promote X from the flat id/quantity format to products[0].
+        const xId  = eventData.payload?.get?.('id');
+        const xQty = eventData.payload?.get?.('quantity') || '1';
+        if (xId) {
+          eventData.payload?.delete?.('id');
+          eventData.payload?.delete?.('quantity');
+          eventData.payload?.set?.('products[0][id]', String(xId));
+          eventData.payload?.set?.('products[0][quantity]', String(xQty));
+        }
+
+        // Append each Y as the next slot in the products array.
+        pending.forEach(({ productId, options }, i) => {
+          const slot = xId ? i + 1 : i;
+          eventData.payload?.set?.(`products[${slot}][id]`, String(productId));
+          eventData.payload?.set?.(`products[${slot}][quantity]`, '1');
+          Object.entries(options).forEach(([optId, val]) => {
+            eventData.payload?.set?.(`products[${slot}][options][${optId}]`, String(val));
+          });
+        });
       });
 
       salla.event.on('product::price.updated.failed',()=>{

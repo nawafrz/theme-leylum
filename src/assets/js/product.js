@@ -68,8 +68,12 @@ class Product extends BasePage {
     // Show one modal step per offer product (Y), in sequence.
     // Collects { productId, options } for each Y that has selections.
     async _handleOfferFreeOptionsSteps(ctx, offerOptionsList) {
-      const modal = document.querySelector('salla-order-options-modal');
-      if (!modal) return ctx;
+      let modal = document.querySelector('salla-order-options-modal');
+      if (!modal) {
+        modal = document.createElement('salla-order-options-modal');
+        document.body.appendChild(modal);
+        await customElements.whenDefined('salla-order-options-modal');
+      }
 
       const pending = [];
 
@@ -133,8 +137,12 @@ class Product extends BasePage {
 
     // Non-PDP: open the modal for X's own free options.
     async _openOptionsModal(ctx, freeOptions, product) {
-      const modal = document.querySelector('salla-order-options-modal');
-      if (!modal) return ctx;
+      let modal = document.querySelector('salla-order-options-modal');
+      if (!modal) {
+        modal = document.createElement('salla-order-options-modal');
+        document.body.appendChild(modal);
+        await customElements.whenDefined('salla-order-options-modal');
+      }
 
       let result;
       try {

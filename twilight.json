@@ -1,10 +1,10 @@
 {
     "name": {
-        "ar": "رائد",
-        "en": "Theme Raed"
+        "ar": "ليلوم",
+        "en": "Leylum"
     },
-    "repository": "https://github.com/SallaApp/theme-raed",
-    "author_email": "support@salla.sa",
+    "repository": "https://github.com/nawafrz/theme-leylum",
+    "author_email": "nawafalzamil04@gmail.com",
     "features": [
         "mega-menu",
         "fonts",
@@ -25,6 +25,17 @@
         "filters"
     ],
     "settings": [
+        {
+            "type": "boolean",
+            "icon": "sicon-text",
+            "label": "استخدام خطوط ليلوم (Tajawal + Amiri للعناوين المائلة)",
+            "description": "عند التفعيل يستخدم المتجر خط Tajawal للنصوص وAmiri للمسات السيريف — أسلوب ليلوم التحريري. عطّله لاستخدام خط سلة المختار.",
+            "id": "use_leylum_fonts",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
         {
             "id": "squar_photo_bg_image_size",
             "type": "items",

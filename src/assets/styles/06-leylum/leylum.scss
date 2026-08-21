@@ -1,0 +1,415 @@
+/* ============================================================================
+   LEYLUM — brand layer
+   Loaded last so it overrides Raed defaults. Editorial skincare aesthetic:
+   warm sand surfaces, hairline dividers, pill geometry, serif accents,
+   soft depth + restrained motion. Merchant primary color still drives CTAs.
+   ============================================================================ */
+
+/* ---------- 1. Tokens ---------- */
+:root {
+  --ly-sand: #EDE5DC;        /* page background */
+  --ly-card: #F7F3EF;        /* light card */
+  --ly-panel: #DED2CB;       /* mid panel */
+  --ly-ink: #7F7B74;         /* primary text */
+  --ly-ink-2: #54504B;       /* darker text */
+  --ly-line: #DCD3C8;        /* hairline */
+  --ly-soft: #F2ECE6;
+  --ly-radius: 22px;
+  --ly-e-out: cubic-bezier(.22, .8, .3, 1);
+  --ly-sh-1: 0 1px 2px rgba(56,45,37,.05), 0 10px 28px -14px rgba(56,45,37,.12);
+  --ly-sh-2: 0 2px 6px rgba(56,45,37,.06), 0 22px 48px -20px rgba(56,45,37,.18);
+
+  /* re-route Raed grays onto the sand scale */
+  --main-text-color: var(--ly-ink-2);
+  --color-text: var(--ly-ink);
+  --bg-gray: #e7dfd626;
+  --color-grey: var(--ly-soft);
+  --color-light-grey: var(--ly-line);
+  --s-radius: 18px;
+}
+
+/* ---------- 2. Canvas & typography ---------- */
+body.theme-leylum {
+  background: var(--ly-sand);
+  color: var(--ly-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* film grain — unifies photos and flat surfaces (desktop only, very subtle) */
+@media (min-width: 1024px) {
+  body.theme-leylum::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    pointer-events: none;
+    opacity: .04;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='180'%20height='180'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.82'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='180'%20height='180'%20filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+body.theme-leylum ::selection {
+  background: var(--ly-panel);
+  color: var(--ly-ink-2);
+}
+
+body.theme-leylum ::-webkit-scrollbar { width: 11px; }
+body.theme-leylum ::-webkit-scrollbar-track { background: var(--ly-sand); }
+body.theme-leylum ::-webkit-scrollbar-thumb {
+  background: var(--ly-panel);
+  border-radius: 99px;
+  border: 3px solid var(--ly-sand);
+}
+body.theme-leylum ::-webkit-scrollbar-thumb:hover { background: var(--ly-ink); }
+
+/* optional Leylum typography (twilight setting: use_leylum_fonts) */
+body.leylum-fonts {
+  --font-main: 'Tajawal';
+  font-weight: 300;
+
+  h1, h2, h3 { font-weight: 400; letter-spacing: -.01em; }
+
+  .leylum-accent,
+  .s-block__title .leylum-accent {
+    font-family: 'Amiri', serif;
+    font-style: italic;
+  }
+}
+
+/* section headings — editorial scale */
+body.theme-leylum .s-block__title h2,
+body.theme-leylum .s-block__title h1 {
+  font-size: clamp(25px, 2.6vw, 33px);
+  font-weight: 400;
+  letter-spacing: -.01em;
+  color: var(--ly-ink);
+}
+
+/* ---------- 3. Header ---------- */
+body.theme-leylum {
+  &:not(.topnav-has-bg):not(.topnav-is-dark) .top-navbar {
+    background: #999590;      /* announcement strip (merchant colors win when set) */
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+
+    .s-search-input {
+      background: rgba(255,255,255,.14);
+      color: #fff;
+      border-radius: 999px;
+    }
+
+    .topnav-link-item { border-color: rgba(255,255,255,.18); }
+  }
+
+  .main-nav-container {
+    background: var(--ly-sand);
+    box-shadow: none;
+    border-bottom: 1px solid transparent;
+    transition: background .3s, box-shadow .3s, border-color .3s;
+  }
+
+  .main-nav-container.fixed-pinned,
+  .main-nav-container.fixed-pinned .inner {
+    background: rgba(237,229,220,.86);
+    box-shadow: 0 1px 0 var(--ly-line);
+  }
+
+  .main-nav-container.fixed-pinned .inner {
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+
+  .main-nav-container .sub-menu { background: var(--ly-card); }
+
+  #mainnav .main-menu > li > a {
+    font-size: 13px;
+    font-weight: 500;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 2px;
+      inset-inline-start: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--ly-ink);
+      transform: scaleX(0);
+      transition: transform .35s var(--ly-e-out);
+    }
+
+    &:hover::after { transform: scaleX(1); }
+  }
+}
+
+/* ---------- 4. Buttons → pill geometry ---------- */
+body.theme-leylum {
+  .btn,
+  .s-button-element,
+  salla-button .s-button-btn {
+    border-radius: 999px !important;
+    font-weight: 700;
+    letter-spacing: .01em;
+    transition: transform .25s var(--ly-e-out), box-shadow .25s, opacity .2s, background .2s;
+  }
+
+  .btn:hover,
+  salla-button .s-button-btn:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px -10px rgba(84,80,75,.45);
+  }
+
+  .btn:active,
+  salla-button .s-button-btn:active {
+    transform: translateY(0) scale(.985);
+    box-shadow: none;
+  }
+
+  .btn--rounded-gray,
+  .btn--circle-gray {
+    background: var(--ly-card);
+    color: var(--ly-ink);
+  }
+}
+
+/* ---------- 5. Product cards — cream, rounded, lifted ---------- */
+body.theme-leylum {
+  .s-product-card,
+  custom-salla-product-card .s-product-card {
+    border: 0;
+    border-radius: var(--ly-radius);
+    box-shadow: 0 1px 0 rgba(56,45,37,.03);
+    transition: transform .35s var(--ly-e-out), box-shadow .35s;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 48px -22px rgba(84,80,75,.28);
+    }
+  }
+
+  /* the visible card surface in Twilight markup is -entry (bg-white in Raed) */
+  .s-product-card-entry {
+    background: var(--ly-card);
+    border-radius: var(--ly-radius);
+  }
+
+  .s-product-card-image {
+    border-radius: var(--ly-radius) var(--ly-radius) 0 0;
+    overflow: hidden;
+  }
+
+  .s-product-card-image img {
+    transition: transform .6s var(--ly-e-out);
+  }
+
+  .s-product-card:hover .s-product-card-image img {
+    transform: scale(1.045);
+  }
+
+  .s-product-card-content { background: transparent; }
+
+  .s-product-card-promotion-title {
+    background: var(--ly-ink);
+    color: var(--ly-card);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+  }
+}
+
+/* ---------- 6. Home blocks — breathing room + soft depth ---------- */
+body.theme-leylum {
+  .s-block { padding-top: 28px; padding-bottom: 28px; }
+
+  .banner,
+  .banner-entry,
+  .full-banner-entry,
+  .s-block--hero-slider .salla-slider-inner,
+  .s-block--hero-slider .swiper {
+    border-radius: 24px;
+    overflow: hidden;
+  }
+
+  .s-block--fixed-banner .banner-entry,
+  .s-block--special-products,
+  .s-block--slider-with-bg .slider-bg {
+    box-shadow: var(--ly-sh-1);
+  }
+
+  /* testimonials as cream cards */
+  .testimonial-entry,
+  .s-block--testimonials .swiper-slide > div {
+    background: var(--ly-card);
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 1px 0 rgba(56,45,37,.03);
+    transition: transform .3s var(--ly-e-out), box-shadow .3s;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 40px -20px rgba(84,80,75,.22);
+    }
+  }
+
+  /* store features strip → hairline panel */
+  .s-block--store-features .features-wrapper,
+  .s-block--store-features .feature-entry {
+    background: var(--ly-soft);
+    border-radius: 18px;
+  }
+}
+
+/* ---------- 7. Forms — pill fields ---------- */
+body.theme-leylum {
+  .form-input,
+  .s-form-control input,
+  input.s-form-control,
+  select {
+    background: var(--ly-card);
+    border: 1px solid var(--ly-line);
+    border-radius: 999px;
+    transition: border-color .25s, box-shadow .25s;
+
+    &:focus {
+      border-color: var(--ly-ink);
+      box-shadow: 0 0 0 3px rgba(127,123,116,.13);
+      outline: none;
+    }
+  }
+
+  textarea.form-input,
+  textarea.s-form-control,
+  textarea {
+    border-radius: 20px;
+  }
+}
+
+/* ---------- 8. Product page ---------- */
+body.theme-leylum {
+  .product-entry,
+  .magnify-wrapper,
+  .s-slider-thumbs .swiper-slide,
+  .product-single-image {
+    border-radius: var(--ly-radius);
+    overflow: hidden;
+  }
+
+  .product-entry { background: var(--ly-card); }
+
+  salla-quantity-input {
+    .s-quantity-input-container,
+    input {
+      background: var(--ly-card);
+      border-color: var(--ly-line);
+      border-radius: 999px;
+    }
+  }
+
+  .s-product-options-option-content,
+  .product__description {
+    border-radius: 18px;
+  }
+
+  /* accordions (details/summary + salla tabs) — scoped to product areas */
+  .product-entry details,
+  .product__description details,
+  .s-collapse {
+    border: 1px solid var(--ly-line);
+    border-radius: 20px;
+    background: var(--ly-card);
+    transition: border-color .25s;
+
+    &:hover { border-color: var(--ly-ink); }
+  }
+
+  .s-tabs-header button[aria-selected="true"],
+  .s-tabs-header .is-active {
+    border-radius: 999px;
+    background: var(--ly-ink);
+    color: var(--ly-card);
+  }
+}
+
+/* ---------- 9. Cart & checkout surfaces ---------- */
+body.theme-leylum {
+  .cart-item,
+  .cart-options,
+  .s-cart-summary,
+  .cart-summary-wrapper {
+    background: var(--ly-card);
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 1px 0 rgba(56,45,37,.03);
+  }
+
+  .cart-item + .cart-item { margin-top: 12px; }
+}
+
+/* ---------- 10. Footer — light editorial with wordmark ---------- */
+body.theme-leylum.footer-is-light .store-footer {
+  background: var(--ly-sand);
+  color: var(--ly-ink);
+  border-top: 1px solid var(--ly-line);
+
+  .store-footer__inner {
+    background: var(--ly-sand);
+    border-bottom: 1px solid var(--ly-line);
+  }
+
+  h3 {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ly-ink);
+  }
+
+  html[lang="en"] & h3 { letter-spacing: .14em; }
+
+  a { color: var(--ly-ink); }
+
+  a:hover {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .social-link { border-color: var(--ly-ink); color: var(--ly-ink); }
+
+  .contact-social { border-color: var(--ly-line); }
+}
+
+body.theme-leylum .leylum-wordmark {
+  font-family: 'Amiri', Georgia, serif;
+  font-size: clamp(22px, 3vw, 32px);
+  color: var(--ly-ink-2);
+  text-align: center;
+  padding: 22px 16px 26px;
+}
+
+html[lang="en"] body.theme-leylum .leylum-wordmark { letter-spacing: .24em; }
+
+body.theme-leylum:not(.footer-is-light) .leylum-wordmark { color: rgba(255,255,255,.85); }
+
+body.theme-leylum.footer-is-light .copyright-text p { color: var(--ly-ink); }
+
+/* ---------- 11. Focus & reduced motion ---------- */
+body.theme-leylum :focus-visible {
+  outline: 2px solid var(--ly-ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.theme-leylum::after { display: none; }
+
+  body.theme-leylum {
+    .btn, .s-product-card, .testimonial-entry, salla-button .s-button-btn {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+}

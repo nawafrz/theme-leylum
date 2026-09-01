@@ -7,7 +7,66 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    {% component home %}
+{% set heroWide = theme.settings.get('hero_image') ?: ('images/leylum/hero-wide.jpg'|asset) %}
+{% set heroPortrait = theme.settings.get('hero_image_mobile') ?: ('images/leylum/hero-portrait.jpg'|asset) %}
+{% set padsId = theme.settings.get('pads_product_id', '1392994776') %}
+{% set creamId = theme.settings.get('cream_product_id', '650419715') %}
+{% set bundleId = theme.settings.get('bundle_product_id', '2093703415') %}
+
+{# ===== Hero ===== #}
+<div class="wrap pgpad">
+  <div class="hero" id="hero">
+    <div class="slide on s-desk hslide" style="background-image:url('{{ heroWide }}')"></div>
+    <div class="slide on s-mob hslide" style="background-image:url('{{ heroPortrait }}')"></div>
+    <div class="shade"></div>
+    <div class="inner">
+      <div class="chip">{{ theme.settings.get('hero_chip', 'ضمان ليلوم — إرجاع مجاني إذا لم يناسبك المنتج') }}</div>
+      <p class="sub">{{ theme.settings.get('hero_sub', 'مكونات فعّالة بمستوى العيادات، مثل PDRN وAHA/BHA/PHA، لفرق تلاحظه من أول استخدام.') }}</p>
+      <h1>{{ theme.settings.get('hero_title', 'تركيبات تعمل') }} <span class="ac">{{ theme.settings.get('hero_title_accent', 'فعلًا.') }}</span></h1>
+      <a class="btn btn-frost" href="{{ link('/products') }}">تسوّق الآن</a>
+    </div>
+  </div>
+</div>
+
+{# ===== Marquee ===== #}
+{% set mq = [
+  [LY_ICON.mq1, 'للاستخدام اليومي'],
+  [LY_ICON.mq2, 'تركيبات مدروسة لنتائج واضحة'],
+  [LY_ICON.mq3, 'فرق واضح من اليوم الأول'],
+  [LY_ICON.mq2, 'شحن مجاني للطلبات فوق 200 ريال']
+] %}
+<div class="marquee"><div class="track">
+  {% for pass in 0..1 %}
+    <span>{% for m in mq %}<span>{{ m[0]|raw }}{{ m[1] }}</span>{% endfor %}</span>
+  {% endfor %}
+</div></div>
+
+{# ===== Bundle + product duo (live Salla products, Leylum cards) ===== #}
+<div class="wrap">
+  <div class="sec-head"><h2>ابدأ <span class="ac">بالمجموعة</span></h2>
+    <p class="lede">الروتين المتكامل بخطوتين، بسعر أقل بـ20% من شرائهما منفصلين.</p></div>
+  <salla-products-list class="ly-bundle-list" source="selected" source-value="[{{ bundleId }}]" limit="1" product-card-component="leylum-bundle-card"></salla-products-list>
+  <salla-products-list class="pcards ly-cards" source="selected" source-value="[{{ padsId }},{{ creamId }}]" limit="2" product-card-component="leylum-product-card"></salla-products-list>
+</div>
+
+{# ===== Wave editorial ===== #}
+<section class="wave" style="background-image:url('{{ 'images/leylum/wave.jpg'|asset }}')">
+  {% if theme.settings.get('wave_video_url', 'https://videos.pexels.com/video-files/37090205/15712462_2560_1440_60fps.mp4') %}
+  <video class="wvid" muted playsinline loop autoplay preload="metadata" aria-hidden="true" poster="{{ 'images/leylum/wave.jpg'|asset }}">
+    <source src="{{ theme.settings.get('wave_video_url', 'https://videos.pexels.com/video-files/37090205/15712462_2560_1440_60fps.mp4') }}" type="video/mp4">
+  </video>
+  {% endif %}
+  <div class="in">
+    <p>نتائج حقيقية تراها من اليوم الأول. بدون مكونات زائدة، وبدون وعود فارغة — <span class="ac">فقط مكونات فعّالة صُنعت لتفي بوعدها.</span></p>
+    <a class="btn btn-frost" href="{{ link('/products') }}">تسوّق الآن</a>
+  </div>
+</section>
+
+{% include 'pages.partials.leylum.clinical' with {prefix: 'clinHome'} %}
+{% include 'pages.partials.leylum.diff' %}
+
+{# Merchant-arranged home components (kept so Salla's editor blocks still work below the fixed Leylum sections) #}
+<div class="ly-home-components">{% component home %}</div>
 {% endblock %}
 {% block scripts %}
     <script defer src="{{ 'home.js' | asset }}"></script>

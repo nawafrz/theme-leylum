@@ -20,7 +20,8 @@ module.exports = {
         pages   : [asset('js/loyalty.js'), asset('js/brands.js'),],
         product : [asset('js/product.js'), asset('js/products.js')],
         order   : asset('js/order.js'),
-        testimonials   : asset('js/testimonials.js')
+        testimonials   : asset('js/testimonials.js'),
+        leylum  : [asset('styles/06-leylum/leylum.scss'), asset('js/leylum.js')]
     },
     output : {
         path: public(),
@@ -60,7 +61,7 @@ module.exports = {
     plugins: [
         new ThemeWatcher(),
         new MiniCssExtractPlugin(),
-        new CopyPlugin({patterns: [{from: asset('images'), to: public('images')}]}),
+        new CopyPlugin({patterns: [{from: asset('images'), to: public('images')},{from: asset('fonts'), to: public('fonts')}]}),
     ],
     optimization: {
         minimizer: [

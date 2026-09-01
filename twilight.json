@@ -26,15 +26,213 @@
     ],
     "settings": [
         {
-            "type": "boolean",
-            "icon": "sicon-text",
-            "label": "استخدام خطوط ليلوم (Tajawal + Amiri للعناوين المائلة)",
-            "description": "عند التفعيل يستخدم المتجر خط Tajawal للنصوص وAmiri للمسات السيريف — أسلوب ليلوم التحريري. عطّله لاستخدام خط سلة المختار.",
-            "id": "use_leylum_fonts",
-            "format": "switch",
+            "type": "static",
+            "format": "title",
+            "id": "static-ly-hero",
+            "value": "ليلوم — الصفحة الرئيسية"
+        },
+        {
+            "type": "string",
+            "icon": "sicon-image",
+            "label": "صورة الهيرو (سطح المكتب)",
+            "id": "hero_image",
+            "value": null,
+            "format": "image",
             "required": false,
-            "value": true,
-            "selected": true
+            "description": "الأنسب 2200×1050 بكسل. اتركها فارغة لاستخدام صورة ليلوم الافتراضية.",
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-image",
+            "label": "صورة الهيرو (الجوال)",
+            "id": "hero_image_mobile",
+            "value": null,
+            "format": "image",
+            "required": false,
+            "description": "الأنسب 1080×1440 بكسل.",
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "شارة الهيرو",
+            "id": "hero_chip",
+            "value": "ضمان ليلوم — إرجاع مجاني إذا لم يناسبك المنتج",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "النص التوضيحي",
+            "id": "hero_sub",
+            "value": "مكونات فعّالة بمستوى العيادات، مثل PDRN وAHA/BHA/PHA، لفرق تلاحظه من أول استخدام.",
+            "format": "textarea",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "العنوان الرئيسي",
+            "id": "hero_title",
+            "value": "تركيبات تعمل",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "كلمة التمييز في العنوان",
+            "id": "hero_title_accent",
+            "value": "فعلًا.",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "رابط فيديو الموج (mp4)",
+            "id": "wave_video_url",
+            "value": "https://videos.pexels.com/video-files/37090205/15712462_2560_1440_60fps.mp4",
+            "format": "text",
+            "required": false,
+            "description": "اتركه فارغًا لعرض الصورة الثابتة فقط.",
+            "placeholder": null
+        },
+        {
+            "type": "static",
+            "format": "line",
+            "id": "static-ly-line1"
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "static-ly-ann",
+            "value": "شريط الإعلانات (يتبدّل تلقائيًا)"
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "الرسالة 1",
+            "id": "ann_1",
+            "value": "شحن مجاني للطلبات فوق 200 ريال",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "الرسالة 2",
+            "id": "ann_2",
+            "value": "ضمان أول استخدام — أو نعيد لك المبلغ",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "الرسالة 3",
+            "id": "ann_3",
+            "value": "توصيل خلال 1–2 يوم عمل للرياض وجدة والدمام",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "الرسالة 4",
+            "id": "ann_4",
+            "value": "إرجاع مجاني إذا لم يناسبك المنتج",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "static",
+            "format": "line",
+            "id": "static-ly-line2"
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "static-ly-products",
+            "value": "ربط المنتجات (أرقام المنتجات في سلة)"
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "رقم منتج مسحات التقشير اللطيف",
+            "id": "pads_product_id",
+            "value": "1392994776",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "رقم منتج كريم الإشراقة الفورية",
+            "id": "cream_product_id",
+            "value": "650419715",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "رقم منتج مجموعة النتائج اليومية",
+            "id": "bundle_product_id",
+            "value": "2093703415",
+            "format": "text",
+            "required": false,
+            "description": null,
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "رابط المنتج الأول في التذييل",
+            "id": "footer_product_1_url",
+            "value": null,
+            "format": "text",
+            "required": false,
+            "description": "رابط صفحة مسحات التقشير اللطيف",
+            "placeholder": null
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "رابط المنتج الثاني في التذييل",
+            "id": "footer_product_2_url",
+            "value": null,
+            "format": "text",
+            "required": false,
+            "description": "رابط صفحة كريم الإشراقة الفورية",
+            "placeholder": null
+        },
+        {
+            "type": "static",
+            "format": "line",
+            "id": "static-ly-line3"
         },
         {
             "id": "squar_photo_bg_image_size",
@@ -1146,4 +1344,3 @@
         "en": "A wide range of features to support your business and provide an exciting shopping experience for your customers"
     }
 }
-

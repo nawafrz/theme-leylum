@@ -1,0 +1,11 @@
+{# ===== Comparison table: LEYLUM vs other brands ===== #}
+<section class="diff"><div class="wrap"><div class="card">
+  <table>
+    <thead><tr><th></th><th><span class="lg">LEYLUM</span></th><th>ماركات أخرى</th></tr></thead>
+    <tbody>
+    {% for r in DIFF_ROWS %}
+      <tr><td>{{ r }}</td><td><span class="yes">{{ LY_ICON.check|raw }}</span></td><td><span class="no">{{ LY_ICON.cross|raw }}</span></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div></div></section>

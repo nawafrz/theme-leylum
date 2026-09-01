@@ -1,0 +1,28 @@
+{# ===== Clinical results panel (home + category). Uses LY from the master layout. ===== #}
+{% set c = LY.cream %}
+<section class="clin"><div class="wrap">
+  <div class="clin-panel" id="{{ prefix|default('clinHome') }}" style="--clac:{{ c.art.ac }};--clwash:{{ c.art.wash }}"
+       data-ly='{{ {
+         'pads':  {'main': LY.pads.art.main|asset,  'ins': LY.pads.art.ins|asset,  'ac': LY.pads.art.ac,  'wash': LY.pads.art.wash,  'stats': LY.pads.stats,  'fn': LY.pads.fn},
+         'cream': {'main': LY.cream.art.main|asset, 'ins': LY.cream.art.ins|asset, 'ac': LY.cream.art.ac, 'wash': LY.cream.art.wash, 'stats': LY.cream.stats, 'fn': LY.cream.fn}
+       }|json_encode|e('html_attr') }}'>
+    <div class="eyebrow">النتائج السريرية</div>
+    <h2>نتائج تتحدث <span class="ac">عن نفسها.</span></h2>
+    <div class="tabs">
+      <button type="button" data-p="pads">{{ LY.pads.name }}</button>
+      <button type="button" data-p="cream" class="on">{{ LY.cream.name }}</button>
+    </div>
+    <div class="stage2">
+      <div class="circ2">
+        <img class="main" src="{{ c.art.main|asset }}" alt="نتائج ليلوم" loading="lazy">
+        <img class="ins" src="{{ c.art.ins|asset }}" alt="" loading="lazy">
+      </div>
+      <div class="stats">
+        {% for s in c.stats %}
+          <div class="stat"><div class="n">{{ s[0] }}</div><div class="t">{{ s[1] }}</div></div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="clin-note">{{ c.fn }}</div>
+  </div>
+</div></section>

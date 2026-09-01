@@ -1,0 +1,143 @@
+/* ===== Salla / Raed → Leylum bridge: maps Twilight components and Raed structure onto the site design ===== */
+body.theme-leylum{
+  /* --- neutralise Raed's generic .btn (flex:1 stretches our pills) --- */
+  .btn{flex:0 0 auto;border-radius:999px;line-height:1.3;white-space:normal}
+  .btn.btn-block{width:100%;flex:0 0 auto}
+  .hero .inner .btn{align-self:flex-start}
+
+  /* --- layout --- */
+  .ly-main{display:block;min-height:40vh}
+  .app-inner{background:var(--sand)}
+  .container{max-width:var(--wrap)}
+
+  /* --- header --- */
+  .store-header{position:sticky;top:0;z-index:60;background:var(--sand)}
+  .ly-hdr{background:var(--sand);border-bottom:1px solid var(--line);box-shadow:none}
+  .ly-hdr .inner{background:transparent}
+  .ly-hdr-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:64px;gap:16px}
+  .ly-hdr-nav{display:flex;align-items:center;gap:26px;justify-self:start}
+  .ly-hdr-act{display:flex;align-items:center;gap:22px;justify-self:end}
+  .ly-logo img{height:26px;width:auto;display:block}
+  .burger{display:none;color:var(--ink);line-height:0}
+  .burger svg{width:24px;height:24px}
+  custom-main-menu{display:block}
+  .main-menu-skel{display:flex;gap:18px}
+  .header-skel-item{display:inline-block;height:10px;border-radius:99px;background:var(--line)}
+  .mobile-menu .main-menu{display:flex;gap:26px;list-style:none;margin:0;padding:0}
+  .mobile-menu .main-menu>li{position:relative}
+  .mobile-menu .main-menu>li>a,.mobile-menu .main-menu>li>span{display:inline-block;padding:4px 0;border-bottom:1px solid transparent;font-size:13.5px;font-weight:500;color:var(--ink);transition:border-color .3s ease;cursor:pointer}
+  .mobile-menu .main-menu>li>a:hover{border-bottom-color:var(--ink)}
+  .mobile-menu .main-menu .sub-menu{position:absolute;top:100%;inset-inline-start:0;background:var(--card);border-radius:14px;padding:10px 0;min-width:200px;box-shadow:0 12px 30px rgba(84,80,75,.14);display:none;z-index:5}
+  .mobile-menu .main-menu li:hover>.sub-menu{display:block}
+  .mobile-menu .main-menu .sub-menu a{display:block;padding:8px 18px;font-size:13px;color:var(--ink)}
+  .mobile-menu .close-mobile-menu{display:none}
+  .hdr-act .ico{width:18px;height:18px;fill:currentColor;display:block}
+  salla-cart-summary .s-cart-summary-wrapper{display:inline-flex;align-items:center;gap:6px;color:var(--ink);font-size:13.5px;font-weight:500;cursor:pointer}
+  salla-cart-summary .s-cart-summary-count{font-size:12px;font-weight:600}
+  salla-cart-summary .s-cart-summary-total{display:none}
+  salla-user-menu .s-user-menu-trigger{color:var(--ink)}
+  salla-user-menu .s-user-menu-trigger i{font-size:18px}
+  @media(max-width:1023px){
+    .burger{display:block}
+    .mobile-menu .close-mobile-menu{display:block}
+    .ly-hdr-row{grid-template-columns:auto 1fr auto;height:58px}
+    .ly-hdr-nav{gap:12px}
+    .ly-logo{justify-self:center}
+    .ly-hdr-act{gap:16px}
+    .acct-lbl{display:none}
+    .mobile-menu .main-menu{display:block}
+    .mobile-menu .main-menu>li>a{display:block;font-size:20px;padding:14px 0;border-bottom:1px solid var(--line)}
+    .mobile-menu .main-menu .sub-menu{position:static;display:block;box-shadow:none;background:transparent;padding:0 0 8px 12px}
+  }
+
+  /* --- product lists (Twilight component) --- */
+  salla-products-list.ly-cards{display:block}
+  .ly-cards .s-products-list-wrapper{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:14px 0 60px}
+  .ly-cards.shop-grid .s-products-list-wrapper{grid-template-columns:1fr 1fr}
+  .ly-cards.shop-grid .pcard-bundle{grid-column:1/-1;min-height:420px;order:-1}
+  .ly-cards .s-products-list-wrapper>leylum-product-card{display:flex;flex-direction:column}
+  .ly-bundle-list{display:block}
+  .ly-bundle-list .s-products-list-wrapper{display:block!important}
+  .ly-bundle-list leylum-bundle-card{display:block;margin-bottom:34px}
+  .s-products-list-placeholder,.s-products-list-loading-wrapper{padding:40px 0;text-align:center;color:var(--ink)}
+  .s-infinite-scroll-btn{display:inline-flex;margin:0 auto 40px;padding:12px 26px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink)}
+  @media(max-width:640px){.ly-cards .s-products-list-wrapper{grid-template-columns:1fr;gap:16px}}
+
+  /* --- add-to-cart buttons rendered by Twilight inside our .btn hosts --- */
+  salla-add-product-button.btn{padding:0;overflow:hidden}
+  salla-add-product-button.btn .s-button-btn{background:transparent;color:inherit;border:0;width:100%;min-height:0;padding:15px 22px;font:inherit;font-weight:600;letter-spacing:inherit;border-radius:inherit;box-shadow:none;display:flex;justify-content:center;align-items:center;gap:8px}
+  salla-add-product-button.btn .s-button-btn:hover{background:rgba(255,255,255,.08)}
+  salla-add-product-button.btn .s-button-text{display:inline}
+  salla-add-product-button.btn-frost .s-button-btn{color:var(--ink-2)}
+  salla-add-product-button .s-button-loader{border-color:currentColor;border-inline-start-color:transparent}
+  .ly-add-pads{background:var(--teal);color:#fff}
+  .ly-add-cream{background:var(--blush);color:#fff}
+  .ly-add-bundle{background:var(--ink);color:#fff}
+
+  /* --- PDP --- */
+  .ly-gal{border-radius:var(--radius);overflow:hidden;background:var(--card)}
+  .ly-gal .swiper-slide img{width:100%;height:100%;object-fit:cover;aspect-ratio:1/1}
+  .ly-gal .thumbs{display:flex;gap:10px;margin-top:12px}
+  .ly-gal .thumbs .slide--one-fourth{width:72px;height:72px;border-radius:14px;overflow:hidden;border:2px solid transparent;cursor:pointer;flex:0 0 auto}
+  .ly-gal .thumbs .swiper-slide-thumb-active{border-color:var(--ink)}
+  .ly-gal .promotion-title{position:absolute;z-index:2;top:14px;inset-inline-start:14px;background:var(--ink);color:#fff;border-radius:999px;padding:5px 12px;font-size:12px}
+  .pdp-buy salla-rating-stars{display:block;margin:6px 0 4px}
+  .pdp-qty{display:flex;gap:12px;align-items:stretch;margin:22px 0 26px}
+  .pdp-qty salla-quantity-input.box{display:flex;align-items:center;border:1px solid var(--ink);border-radius:999px;padding:0 6px;background:var(--card)}
+  .pdp-qty salla-quantity-input .s-quantity-input-wrapper{display:flex;align-items:center;gap:2px}
+  .pdp-qty salla-quantity-input button{width:38px;height:44px;border:0;background:transparent;color:var(--ink);font-size:18px;cursor:pointer}
+  .pdp-qty salla-quantity-input input{width:34px;text-align:center;border:0;background:transparent;font-weight:600;color:var(--ink-2)}
+  .pdp-qty .ly-add{flex:1}
+  .pdp-desc{margin-top:18px;color:var(--ink)}
+  .ly-pdp-meta{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:22px;font-size:12.5px;color:var(--ink)}
+  .ly-share .s-social-share-wrapper{gap:8px}
+  salla-installment{display:block;margin-top:14px}
+  salla-installment .s-installment-wrapper{background:var(--card);border-radius:16px;border:1px solid var(--line)}
+  salla-quick-order{margin-top:16px}
+  .product-form .s-product-options-option{margin-bottom:16px}
+  .product-form .s-product-options-option-label{font-weight:600;font-size:13.5px;margin-bottom:8px;color:var(--ink-2)}
+  .product-form select,.product-form input[type=text],.product-form textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--card);font:inherit}
+  .out-of-stock{color:#b33;font-weight:600;margin-top:8px}
+  .ly-comments{padding:20px 40px 60px}
+  salla-comments .s-comments-wrapper{background:var(--card);border-radius:22px;padding:26px}
+  .article{line-height:1.8}
+  .article p{margin:0 0 12px}
+  .article ul,.article ol{padding-inline-start:20px;margin:0 0 12px}
+  .article img{border-radius:14px;margin:12px 0}
+
+  /* --- info pages --- */
+  .ly-page{max-width:820px;margin:0 auto}
+  .ly-page h1{font-size:34px;font-weight:500;margin:0 0 22px}
+  .ly-page h2{font-size:21px;font-weight:500;margin:26px 0 10px}
+  .ly-page h3{font-size:17px;font-weight:600;margin:20px 0 8px}
+  .ly-page salla-comments{display:block;margin-top:40px}
+
+  /* --- category page --- */
+  .ly-sort{display:flex;justify-content:flex-end;align-items:center;gap:10px;font-size:13px;margin:-10px 0 10px}
+  .ly-sort select{border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--card);font:inherit}
+  .ly-listing{display:flex;gap:30px;align-items:flex-start}
+  .ly-listing .ly-filters{flex:0 0 260px;background:var(--card);border-radius:18px;padding:18px}
+  .ly-listing salla-products-list{flex:1;min-width:0}
+  @media(max-width:900px){.ly-listing{flex-direction:column}.ly-listing .ly-filters{width:100%;flex-basis:auto}}
+
+  /* --- footer extras --- */
+  .ly-footer .ftr-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;padding:56px 40px 46px;max-width:var(--wrap);margin:0 auto}
+  .ly-footer .ftr-cols h4{margin:0 0 18px;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+  .ly-footer .ftr-cols a{display:block;padding:6px 0;font-size:14px;color:var(--ink)}
+  .ly-footer .ftr-cols salla-menu ul{list-style:none;margin:0;padding:0}
+  .ly-footer .ftr-cols salla-menu li a{display:block;padding:6px 0;font-size:14px}
+  .ly-footer .ftr-cols salla-menu .s-menu-cookie-preferences{display:none}
+  .ly-ftr-salla{border-top:1px solid var(--line);padding:18px 0 26px}
+  .ly-ftr-salla .wrap{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;font-size:12px;color:var(--ink)}
+  .ly-ftr-salla salla-payments .s-payments-wrapper{gap:10px;opacity:.8}
+  .ly-ftr-trust{display:flex;gap:14px;align-items:center}
+  @media(max-width:900px){.ly-footer .ftr-cols{grid-template-columns:1fr;padding:34px 20px 20px;gap:18px}.ly-ftr-salla .wrap{flex-direction:column;align-items:flex-start}}
+
+  /* --- Raed leftovers we do not want --- */
+  .top-navbar,.leylum-wordmark,.store-footer__inner{display:none}
+  .s-block--special-products{padding-top:20px}
+  .ly-home-components .s-block{margin-top:40px}
+
+  /* --- warm cursor on top of Salla modals --- */
+  .curW,.curD{z-index:2147483000}
+}
